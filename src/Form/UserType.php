@@ -4,7 +4,9 @@
 namespace App\Form;
 
 
+//use App\Entity\Color;
 use App\Entity\User;
+//use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -35,6 +37,11 @@ class UserType extends AbstractType
                      'constraints' => new IsTrue(),
                      'label' => 'I agree to the Terms of Service'
                  ])
+//              :TODO Let users choose colors.
+//             ->add('color', EntityType::class,
+//                 [
+//                     'class' => Color::class
+//                 ])
              ->add('Register', SubmitType::class);
     }
 

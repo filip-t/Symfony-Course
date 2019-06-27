@@ -5,10 +5,6 @@
         <div class="alert alert-success">{{ message }}</div>
     {% endfor %}
 
-    <small class="d-block text-right mt-3">
-        <a href="{{ path('micro_post_add') }}">Add new</a>
-    </small>
-
     <h6 class="border-bottom border-gray pb-2 mb-0">Recent updates</h6>
 
     {% for post in posts %}
@@ -17,8 +13,12 @@
         </a>
 
         <small class="d-block text-right mt-3">
-            <a href="{{ path('micro_post_edit', { 'id': post.id}) }}">Edit</a> |
-            <a href="{{ path('micro_post_delete', { 'id': post.id}) }}">Delete</a>
+            {% if is_granted('edit', post) %}
+                <a href="{{ path('micro_post_edit', { 'id': post.id}) }}">Edit</a> |
+            {% endif %}
+            {% if is_granted('delete', post) %}
+                <a href="{{ path('micro_post_delete', { 'id': post.id}) }}">Delete</a>
+            {% endif %}
         </small>
     {% endfor %}
 {% endblock %}

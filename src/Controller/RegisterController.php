@@ -4,6 +4,7 @@
 namespace App\Controller;
 
 
+use App\Entity\Color;
 use App\Entity\User;
 use App\Form\UserType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -20,6 +21,7 @@ class RegisterController extends AbstractController
         Request $request)
     {
         $user = new User();
+        $colors = new Color();
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
@@ -30,12 +32,14 @@ class RegisterController extends AbstractController
                 $user->getPlainPassword()
             );
             $user->setPassword($password);
+            $user->setColor($colors->list[rand(0, count($colors->list)-1)]);
 
             $entityManager = $this->getDoctrine()->getManager();
+            $user->setRoles([User::ROLE_USER]);
             $entityManager->persist($user);
             $entityManager->flush();
 
-            $this->redirectToRoute('micro_post_index');
+            return $this->redirectToRoute('micro_post_index');
         }
 
         return $this->render('register/register.html.twig',
