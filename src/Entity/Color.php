@@ -6,6 +6,8 @@ namespace App\Entity;
 
 class Color
 {
+    // TODO: Make something better here
+
     public $list;
 
     public function __construct()
