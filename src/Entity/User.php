@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -68,10 +69,41 @@ class User implements UserInterface, \Serializable
     private $roles;
 
     /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\User", mappedBy="following")
+     */
+    private $followers;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\User", inversedBy="followers")
+     * @ORM\JoinTable(name="following",
+     *     joinColumns={
+     *          @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     *     },
+     *     inverseJoinColumns={
+     *          @ORM\JoinColumn(name="following_user_id", referencedColumnName="id")
+     *     }
+     * )
+     */
+    private $following;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\MicroPost", mappedBy="likedBy")
+     */
+    private $postsLiked;
+
+    /**
      * @var string
      * @ORM\Column(type="string")
      */
     private $color;
+
+    public function __construct()
+    {
+        $this->posts = new ArrayCollection();
+        $this->followers = new ArrayCollection();
+        $this->following = new ArrayCollection();
+        $this->postsLiked = new ArrayCollection();
+    }
 
     /**
      * @return string
@@ -87,11 +119,6 @@ class User implements UserInterface, \Serializable
     public function setColor(string $color): void
     {
         $this->color = $color;
-    }
-
-    public function __construct()
-    {
-        $this->posts = new ArrayCollection();
     }
 
     /**
@@ -269,5 +296,39 @@ class User implements UserInterface, \Serializable
     public function getPosts()
     {
         return $this->posts;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getFollowers()
+    {
+        return $this->followers;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getFollowing()
+    {
+        return $this->following;
+    }
+
+    public function follow(User $userToFollow)
+    {
+        if ($this->getFollowing()->contains($userToFollow))
+        {
+            return;
+        }
+
+        $this->getFollowing()->add($userToFollow);
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getPostsLiked()
+    {
+        return $this->postsLiked;
     }
 }
