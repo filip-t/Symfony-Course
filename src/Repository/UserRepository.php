@@ -46,6 +46,13 @@ class UserRepository extends ServiceEntityRepository
             ->having('count(mp) > 5');
     }
 
+//    private function getFindMoreThan5PostsQueryTest(): QueryBuilder
+//    {
+//        $qb = $this->createNativeNamedQuery('name');
+//
+//        return $qb->
+//    }
+
     // /**
     //  * @return User[] Returns an array of User objects
     //  */

@@ -97,6 +97,11 @@ class User implements UserInterface, \Serializable
      */
     private $color;
 
+//    /**
+//     * @var Assert\Collection
+//     */
+//    private $test;
+
     public function __construct()
     {
         $this->posts = new ArrayCollection();
@@ -170,11 +175,13 @@ class User implements UserInterface, \Serializable
     }
 
     /**
-     * @param $password
+     * @param mixed $password
+     * @return User
      */
-    public function setPassword($password): void
+    public function setPassword($password)
     {
         $this->password = $password;
+        return $this;
     }
 
     /**
@@ -299,7 +306,7 @@ class User implements UserInterface, \Serializable
     }
 
     /**
-     * @return Collection
+     * @return Collection|User[]
      */
     public function getFollowers()
     {

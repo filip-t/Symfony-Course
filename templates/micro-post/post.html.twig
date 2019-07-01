@@ -29,14 +29,14 @@
             likeButton,
             unlikeButton,
             document.getElementById('likes-unlike'),
-            '{{ path('likes_unlike', {'id': post.id}) }}'  //WTF???? why app_...?
+            '{{ path('likes_like', {'id': post.id}) }}'
         );
 
         addOnClick(
             unlikeButton,
             likeButton,
             document.getElementById('likes-like'),
-            '{{ path('likes_like', {'id': post.id}) }}'
+            '{{ path('likes_unlike', {'id': post.id}) }}'
         );
 
         function switchButtons(button, oppositeButton) {
