@@ -27,7 +27,7 @@ abstract class Notification
     /**
      * @ORM\Column(type="boolean")
      */
-    private $seen;
+    private $seen = false;
 
     /**
      * @return int
@@ -45,7 +45,7 @@ abstract class Notification
         return $this->user;
     }
 
-    public function setUser(string $user): self
+    public function setUser($user): self
     {
         $this->user = $user;
 
