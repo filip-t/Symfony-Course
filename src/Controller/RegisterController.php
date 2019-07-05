@@ -7,7 +7,9 @@ namespace App\Controller;
 use App\Entity\Color;
 use App\Entity\User;
 use App\Form\UserType;
+use App\Event\UserRegisterEvent;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -18,7 +20,9 @@ class RegisterController extends AbstractController
      * @Route("/register", name="user_register")
      */
     public function register(UserPasswordEncoderInterface $passwordEncoder,
-        Request $request)
+        Request $request,
+        EventDispatcherInterface $eventDispatcher
+        )
     {
         $user = new User();
         $colors = new Color();
@@ -35,9 +39,12 @@ class RegisterController extends AbstractController
             $user->setColor($colors->list[rand(0, count($colors->list)-1)]);
 
             $entityManager = $this->getDoctrine()->getManager();
-            $user->setRoles([User::ROLE_USER]);
             $entityManager->persist($user);
             $entityManager->flush();
+
+            $userRegisterEvent = new UserRegisterEvent($user);
+
+            $eventDispatcher->dispatch($userRegisterEvent);
 
             return $this->redirectToRoute('micro_post_index');
         }
